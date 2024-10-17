@@ -132,7 +132,11 @@ public class GolfBallCollector : MonoBehaviour
         }
 
         GolfBallLevel minLevel = golfBallsOnPerson.Min();
-        return golfBall.GetComponent<GolfBall>().GetLevel() > minLevel;
+
+        float minScorePerDistance = ((int)minLevel) / Vector3.Distance(transform.position, golfCart.position);
+        float scorePerDistance = ((int)golfBall.GetComponent<GolfBall>().GetLevel()) / (Vector3.Distance(transform.position, golfBall.transform.position) + Vector3.Distance(golfBall.transform.position, golfCart.position));
+
+        return scorePerDistance > minScorePerDistance;
     }
 
     private void GoFor(GameObject bestGolfBall)
@@ -154,8 +158,7 @@ public class GolfBallCollector : MonoBehaviour
             return false;
         }
 
-        UnityEngine.AI.NavMeshPath path = new UnityEngine.AI.NavMeshPath();
-        if (agent.CalculatePath(destination, path))
+        if (CalculatePath(destination, out UnityEngine.AI.NavMeshPath path))
         {
             distance = 0f;
             if (path.corners.Length > 1)
@@ -172,6 +175,12 @@ public class GolfBallCollector : MonoBehaviour
             distance = float.MaxValue;
             return false;
         }
+    }
+
+    public bool CalculatePath(Vector3 destination, out UnityEngine.AI.NavMeshPath path)
+    {
+        path = new UnityEngine.AI.NavMeshPath();
+        return agent.CalculatePath(destination, path);
     }
 
     private bool SwapLeastValuableBall(GameObject other, out GolfBallLevel? swappedLevel, bool forceSwap = false)

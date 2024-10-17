@@ -17,7 +17,13 @@ public class GolfBall : MonoBehaviour
     public void SetLevel(GolfBallLevel level)
     {
         this.level = level;
-        meshRenderer.material = materials[(int)level];
+        meshRenderer.material = level switch
+        {
+            GolfBallLevel.Easy => materials[1],
+            GolfBallLevel.Medium => materials[2],
+            GolfBallLevel.Hard => materials[3],
+            _ => meshRenderer.material
+        };
     }
 
     public GolfBallLevel GetLevel()
@@ -46,7 +52,7 @@ public class GolfBall : MonoBehaviour
 
 public enum GolfBallLevel
 {
-    Easy = 1,
-    Medium = 2,
-    Hard = 3
+    Easy = 2,
+    Medium = 4,
+    Hard = 8
 }

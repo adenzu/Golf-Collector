@@ -39,7 +39,7 @@ public class GolfBallSpawner : MonoBehaviour
 
                 if (NavMesh.SamplePosition(spawnPosition, out NavMeshHit navMeshHit, 2f, NavMesh.AllAreas))
                 {
-                    GameObject golfBall = Instantiate(golfBallPrefab, navMeshHit.position + Vector3.up, Quaternion.identity, transform);
+                    GameObject golfBall = Instantiate(golfBallPrefab, navMeshHit.position + Vector3.up * 0.2f, Quaternion.identity, transform);
                     initializer.Initialize(golfBall);
                     spawnedGolfBalls++;
                 }
