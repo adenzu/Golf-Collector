@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
 {
@@ -9,6 +10,9 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] private Slider healthSlider;
     [SerializeField] private TMPro.TextMeshProUGUI scoreText;
+    [SerializeField] private Button restartButton;
+    [SerializeField] private Button resumeButton;
+    [SerializeField] private GameObject pauseMenu;
 
     private void Awake()
     {
@@ -20,6 +24,39 @@ public class UIManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    private void Start()
+    {
+        restartButton.onClick.AddListener(GameManager.Instance.RestartGame);
+        resumeButton.onClick.AddListener(ResumeGame);
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            TogglePause();
+        }
+    }
+
+    private void TogglePause()
+    {
+        pauseMenu.SetActive(!pauseMenu.activeSelf);
+        if (pauseMenu.activeSelf)
+        {
+            GameManager.Instance.PauseGame();
+        }
+        else
+        {
+            GameManager.Instance.ResumeGame();
+        }
+    }
+
+    private void ResumeGame()
+    {
+        pauseMenu.SetActive(false);
+        GameManager.Instance.ResumeGame();
     }
 
     public void UpdateHealthUI(int currentHealth, int maxHealth)
