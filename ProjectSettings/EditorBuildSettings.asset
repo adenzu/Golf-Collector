@@ -8,4 +8,7 @@ EditorBuildSettings:
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
+  - enabled: 1
+    path: Assets/Scenes/GolfCourse.unity
+    guid: df5db963ed4824841932a804b3f961ea
   m_configObjects: {}
