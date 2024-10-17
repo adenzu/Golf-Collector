@@ -16,7 +16,6 @@ public class VisualGolfBallSensory : AbstractGolfBallSensory
         return GameObject.FindGameObjectsWithTag(golfBallTag).Where(IsGolfBallVisible).ToArray();
     }
 
-
     public override void BlackList(GameObject golfBall)
     {
         golfBall.tag = blackListedTag;
