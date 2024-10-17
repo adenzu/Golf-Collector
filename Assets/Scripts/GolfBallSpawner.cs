@@ -8,7 +8,6 @@ public class GolfBallSpawner : MonoBehaviour
     [SerializeField] private GameObject golfBallPrefab;
     [SerializeField, Min(0)] private AbstractGolfBallInitializer initializer;
     [SerializeField, Min(0)] private int numberOfGolfBalls;
-    [SerializeField, Min(0f)] private float spawnInterval = 0f;
 
     private void Start()
     {
@@ -17,6 +16,7 @@ public class GolfBallSpawner : MonoBehaviour
 
     private IEnumerator SpawnGolfBalls()
     {
+
         NavMeshTriangulation triangulation = NavMesh.CalculateTriangulation();
         Bounds bounds = new Bounds(triangulation.vertices[0], Vector3.zero);
         foreach (Vector3 vertex in triangulation.vertices)
@@ -24,7 +24,8 @@ public class GolfBallSpawner : MonoBehaviour
             bounds.Encapsulate(vertex);
         }
 
-        for (int i = 0; i < numberOfGolfBalls; i++)
+        int spawnedGolfBalls = 0;
+        while (spawnedGolfBalls < numberOfGolfBalls)
         {
             Vector3 spawnPosition = new Vector3(
                 Random.Range(bounds.min.x, bounds.max.x),
@@ -32,13 +33,19 @@ public class GolfBallSpawner : MonoBehaviour
                 Random.Range(bounds.min.z, bounds.max.z)
             );
 
-            if (Physics.Raycast(spawnPosition, Vector3.down, out RaycastHit hit))
+            if (Physics.Raycast(spawnPosition + Vector3.up, Vector3.down, out RaycastHit hit, bounds.max.y + 1f, LayerMask.GetMask("Ground")))
             {
-                spawnPosition.y = hit.point.y + golfBallPrefab.transform.localScale.y / 2;
-                initializer.Initialize(Instantiate(golfBallPrefab, spawnPosition, Quaternion.identity, transform));
+                spawnPosition = hit.point + Vector3.up;
+
+                if (NavMesh.SamplePosition(spawnPosition, out NavMeshHit navMeshHit, 2f, NavMesh.AllAreas))
+                {
+                    GameObject golfBall = Instantiate(golfBallPrefab, navMeshHit.position + Vector3.up, Quaternion.identity, transform);
+                    initializer.Initialize(golfBall);
+                    spawnedGolfBalls++;
+                }
             }
 
-            yield return new WaitForSeconds(spawnInterval);
+            yield return null;
         }
     }
 }

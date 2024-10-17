@@ -797,7 +797,7 @@ GameObject:
   - component: {fileID: 408098434}
   - component: {fileID: 408098433}
   - component: {fileID: 408098432}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Terrain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3128,7 +3128,6 @@ MonoBehaviour:
     type: 3}
   initializer: {fileID: 1588272667}
   numberOfGolfBalls: 250
-  spawnInterval: 0
 --- !u!114 &1588272667
 MonoBehaviour:
   m_ObjectHideFlags: 0
